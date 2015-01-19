@@ -42,7 +42,7 @@ namespace Assets.Scripts
         {
             var absSpeed = Math.Abs(rigidbody2D.velocity.x);
             if (absSpeed < MaxRunSpeed || CurrentDirection() != direction)
-                rigidbody2D.AddForce(new Vector2(direction == PlayerDirection.Left? -RunForce : RunForce, 0), ForceMode2D.Impulse);
+                rigidbody2D.AddForce(new Vector2(direction == PlayerDirection.Right? RunForce : -RunForce, 0), ForceMode2D.Impulse);
         }
 
         PlayerDirection CurrentDirection()
