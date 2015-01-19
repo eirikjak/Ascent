@@ -58,8 +58,7 @@ namespace Assets.Scripts
         {
             if (!CanJump()) return;
             Debug.Log("Jump!");
-            var calculatedJumpForce = JumpForce +
-                                      Mathf.Log10(Mathf.Max(0.0001f, JumpForce*Math.Abs(rigidbody2D.velocity.x)));
+            var calculatedJumpForce = JumpForce;
             transform.rigidbody2D.AddForce(new Vector2(0, calculatedJumpForce), ForceMode2D.Impulse);
         }
 
