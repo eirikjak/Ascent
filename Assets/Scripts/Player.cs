@@ -1,114 +1,67 @@
 ﻿using System;
-using Assets.Scripts;
+using Assets.Scripts.GameInput;
 using UnityEngine;
-using System.Collections;
 
-public class Player : MonoBehaviour
+namespace Assets.Scripts
 {
-
-    public PlayerDirection Direction;
-    public float JumpForce = 10.0f;
-    public float RunForce = 30.0f;
-    public float MaxRunSpeed = 10.0f;
-
-    private PlayerInputListener m_playerInputListener;
-    // Use this for initialization
-	void Start () 
+    public class Player : MonoBehaviour, IPlayer
     {
-    
-        m_playerInputListener = new PlayerInputListener();
-        m_playerInputListener.JumpInput += OnPlayerInput;
-	    if (Direction == PlayerDirection.Left)
-	        RunForce = -Math.Abs(RunForce);
-	    else
-	    {
-	        RunForce = Math.Abs(RunForce);
-	    }
-	
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        m_playerInputListener.Update();
-        if (IsOnEdge())
+        public float JumpForce = 10.0f;
+        public float RunForce = 30.0f;
+        public float MaxRunSpeed = 10.0f;
+
+        private PlayerInput m_inputHandler;
+        // Use this for initialization
+        void Start () 
         {
-            ToggleDirection();
+            m_inputHandler = new PlayerKeyboardInput(this);
         }
-        if(IsOnGround() && Math.Abs(rigidbody2D.velocity.x) < MaxRunSpeed)
-            Run();
-        collider2D.enabled = IsOnGround() || rigidbody2D.velocity.y < 0;
 
-     
-    }
-    void ToggleDirection()
-    {
-        switch (Direction)
+        // Update is called once per frame
+        void Update()
         {
-            case PlayerDirection.Left:
-                Direction = PlayerDirection.Right;
-                break;
-            case PlayerDirection.Right:
-                Direction = PlayerDirection.Left;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            m_inputHandler.Update();
+            collider2D.enabled = IsOnGround() || rigidbody2D.velocity.y < 0;
+
         }
-        RunForce *= -1;
-        rigidbody2D.velocity = Vector2.zero;
-    }
+
    
-    bool IsOnGround()
-    {
-        var extents = collider2D.bounds.extents;
-        var originGroundRay = new Vector2(transform.position.x, transform.position.y - extents.y);
-        Debug.DrawRay(originGroundRay, Vector3.down * 0.1f, Color.red, 0.05f);
-        var hitGround = Physics2D.Raycast(originGroundRay, -Vector2.up, 0.1f, 1 << LayerMask.NameToLayer("Platform"));
-        return hitGround.collider != null;
-    }
+        bool IsOnGround()
+        {
+            var extents = collider2D.bounds.extents;
+            var originGroundRay = new Vector2(transform.position.x, transform.position.y - extents.y);
+            Debug.DrawRay(originGroundRay, Vector3.down * 0.1f, Color.red, 0.05f);
+            var hitGround = Physics2D.Raycast(originGroundRay, -Vector2.up, 0.1f, 1 << LayerMask.NameToLayer("Platform"));
+            return hitGround.collider != null;
+        }
     
-    bool IsOnEdge()
-    {
-        var extents = collider2D.bounds.extents;
-        var originLeftRay = new Vector2(transform.position.x - extents.x, transform.position.y);
-        var originRightRay = new Vector2(transform.position.x + extents.x, transform.position.y);
 
-        if (Direction == PlayerDirection.Left)
+
+        public void Run(PlayerDirection direction)
         {
-            Debug.DrawRay(originLeftRay, Vector3.down*extents.y, Color.red, 0.01f);
-            var hitLeft = Physics2D.Raycast(originLeftRay, -Vector2.up, extents.y + 0.1f, 1 << LayerMask.NameToLayer("Platform"));
-            return hitLeft.collider == null && IsOnGround();
-        }
-        else
-        {
-            Debug.DrawRay(originRightRay, Vector3.down * extents.y, Color.red, 0.01f);
-            var hitRight = Physics2D.Raycast(originRightRay, -Vector2.up, extents.y + 0.1f, 1 << LayerMask.NameToLayer("Platform"));
-            return hitRight.collider == null && IsOnGround();
+            var absSpeed = Math.Abs(rigidbody2D.velocity.x);
+            if (absSpeed < MaxRunSpeed || CurrentDirection() != direction)
+                rigidbody2D.AddForce(new Vector2(direction == PlayerDirection.Left? -RunForce : RunForce, 0), ForceMode2D.Impulse);
         }
 
-    }
+        PlayerDirection CurrentDirection()
+        {
+            return rigidbody2D.velocity.x > 0 ? PlayerDirection.Right : PlayerDirection.Left;
+        }
 
-    void Run()
-    {
-        
-        rigidbody2D.AddForce(new Vector2(RunForce, 0));
-    }
+        private bool CanJump()
+        {
+            return IsOnGround();
+        }
+        public void Jump()
+        {
+            if (!CanJump()) return;
+            Debug.Log("Jump!");
+            var calculatedJumpForce = JumpForce +
+                                      Mathf.Log10(Mathf.Max(0.0001f, JumpForce*Math.Abs(rigidbody2D.velocity.x)));
+            transform.rigidbody2D.AddForce(new Vector2(0, calculatedJumpForce), ForceMode2D.Impulse);
+        }
 
-    private void OnPlayerInput(object sender, EventArgs args)
-    {
-            Jump(JumpForce);
     }
-
-
-    private bool CanJump()
-    {
-        return IsOnGround();
-    }
-    public void Jump(float jumpForce)
-    {
-        if (!CanJump()) return;
-        Debug.Log("Jump!");
-        transform.rigidbody2D.AddForce(new Vector2(0, jumpForce + 0.5f*jumpForce*Math.Abs(rigidbody2D.velocity.x)), ForceMode2D.Impulse);
-    }
-
 }
