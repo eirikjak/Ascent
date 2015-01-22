@@ -13,7 +13,7 @@ namespace Assets.Scripts.Pickups
 
         protected override void OnPlayerCollision(PlayerMovement player)
         {
-            player.Jump();
+            player.BoostUp();
             OnPickedUp();
             Destroy(gameObject);
         }

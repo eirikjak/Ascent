@@ -8,6 +8,6 @@ namespace Assets.Scripts
     interface IPlayer
     {
         void Run(PlayerDirection direction);
-        void Jump();
+        void JumpFromGround();
     }
 }

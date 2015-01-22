@@ -345,12 +345,16 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11419402, guid: ff6a9e53095440548a879236af4eab11, type: 2}
       propertyPath: MaxPlatformDistance.x
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 11419402, guid: ff6a9e53095440548a879236af4eab11, type: 2}
       propertyPath: MaxPlatformDistance.y
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 11419402, guid: ff6a9e53095440548a879236af4eab11, type: 2}
+      propertyPath: CoinPrefab
+      value: 
+      objectReference: {fileID: 178686, guid: 4552c41dac5ecdc4a8a2309817898c8f, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ff6a9e53095440548a879236af4eab11, type: 2}
   m_RootGameObject: {fileID: 753452890}
@@ -454,7 +458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 997039307}
   ChaseHeight: 5
-  MinChaseSpeed: 1
+  MinChaseSpeed: 0
   MaxChaseSpeed: 5
   ChaseAcceleration: 0
 --- !u!1 &753452890
@@ -486,7 +490,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlatformPrefab: {fileID: 186802, guid: dbf45ee71bcf4344f9a92aa76251e7f2, type: 2}
-  MaxPlatformDistance: {x: 4, y: 4}
+  CoinPrefab: {fileID: 178686, guid: 4552c41dac5ecdc4a8a2309817898c8f, type: 2}
+  MaxPlatformDistance: {x: 3, y: 3}
   MinPlatformDistance: {x: 1, y: 3}
 --- !u!4 &753452892
 Transform:
@@ -793,8 +798,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   JumpForce: 15
-  RunForce: 17
-  MaxRunSpeed: 9
+  RunForce: 45
+  MaxVelocity: {x: 5, y: 15}
 --- !u!114 &997039313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -871,7 +876,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
---- !u!1001 &1116912516
+--- !u!1001 &1156914944
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -909,10 +914,6 @@ Prefab:
     - target: {fileID: 478686, guid: 4552c41dac5ecdc4a8a2309817898c8f, type: 2}
       propertyPath: m_RootOrder
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5895578, guid: 4552c41dac5ecdc4a8a2309817898c8f, type: 2}
-      propertyPath: m_IsTrigger
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4552c41dac5ecdc4a8a2309817898c8f, type: 2}
@@ -1097,12 +1098,13 @@ Prefab:
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 178686, guid: 4552c41dac5ecdc4a8a2309817898c8f, type: 2}
-  m_PrefabInternal: {fileID: 1116912516}
+  m_PrefabInternal: {fileID: 1156914944}
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 1949715172}
   - 212: {fileID: 1949715171}
   - 58: {fileID: 1949715170}
+  - 114: {fileID: 1949715173}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
@@ -1115,7 +1117,7 @@ CircleCollider2D:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 5895578, guid: 4552c41dac5ecdc4a8a2309817898c8f,
     type: 2}
-  m_PrefabInternal: {fileID: 1116912516}
+  m_PrefabInternal: {fileID: 1156914944}
   m_GameObject: {fileID: 1949715169}
   m_Enabled: 1
   m_Material: {fileID: 0}
@@ -1127,7 +1129,7 @@ SpriteRenderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 21278686, guid: 4552c41dac5ecdc4a8a2309817898c8f,
     type: 2}
-  m_PrefabInternal: {fileID: 1116912516}
+  m_PrefabInternal: {fileID: 1156914944}
   m_GameObject: {fileID: 1949715169}
   m_Enabled: 1
   m_CastShadows: 0
@@ -1149,7 +1151,7 @@ SpriteRenderer:
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 478686, guid: 4552c41dac5ecdc4a8a2309817898c8f, type: 2}
-  m_PrefabInternal: {fileID: 1116912516}
+  m_PrefabInternal: {fileID: 1156914944}
   m_GameObject: {fileID: 1949715169}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.83795691, y: .928262055, z: 0}
@@ -1157,6 +1159,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &1949715173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11416820, guid: 4552c41dac5ecdc4a8a2309817898c8f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1156914944}
+  m_GameObject: {fileID: 1949715169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bcbd6d36939b4346b9f5f8ee0e8d551, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2069284120
 Prefab:
   m_ObjectHideFlags: 0

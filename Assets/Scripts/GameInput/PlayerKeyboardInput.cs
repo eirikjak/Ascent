@@ -15,7 +15,7 @@ namespace Assets.Scripts.GameInput
         {
             if (Input.GetKeyDown("space"))
             {
-                Player.Jump();
+                Player.JumpFromGround();
             }
             if (Input.GetKey("left"))
             {

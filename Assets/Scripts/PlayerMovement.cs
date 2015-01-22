@@ -9,7 +9,7 @@ namespace Assets.Scripts
 
         public float JumpForce = 10.0f;
         public float RunForce = 30.0f;
-        public float MaxRunSpeed = 10.0f;
+        public Vector2 MaxVelocity = new Vector2(5, 5);
 
         private PlayerInput m_inputHandler;
         // Use this for initialization
@@ -22,7 +22,7 @@ namespace Assets.Scripts
         void Update()
         {
             m_inputHandler.Update();
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Platform"), LayerMask.NameToLayer("PlayerMovement"), !(IsOnGround() || rigidbody2D.velocity.y < 0));
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Platform"), LayerMask.NameToLayer("Player"), !(IsOnGround() || rigidbody2D.velocity.y < 0));
 
         }
 
@@ -42,7 +42,7 @@ namespace Assets.Scripts
         {
             var absSpeed = Math.Abs(rigidbody2D.velocity.x);
             var force = RunForce*Time.deltaTime;
-            if (absSpeed < MaxRunSpeed || CurrentDirection() != direction)
+            if (absSpeed < MaxVelocity.x || CurrentDirection() != direction)
                 rigidbody2D.AddForce(new Vector2(direction == PlayerDirection.Right? force : -force, 0), ForceMode2D.Impulse);
         }
 
@@ -52,16 +52,27 @@ namespace Assets.Scripts
         }
 
      
-        private bool CanJump()
+        private bool CanJumpFromGound()
         {
             return IsOnGround();
         }
-        public void Jump()
+        public void JumpFromGround()
         {
-            if (!CanJump()) return;
-            Debug.Log("Jump!");
-            var calculatedJumpForce = JumpForce;
+            if (!CanJumpFromGound()) return;
+                Jump(JumpForce);
+        }
+
+        private void Jump(float force)
+        {
+            if (!(rigidbody2D.velocity.y < MaxVelocity.y)) return;
+            var calculatedJumpForce = force;
             transform.rigidbody2D.AddForce(new Vector2(0, calculatedJumpForce), ForceMode2D.Impulse);
+        }
+        public void BoostUp()
+        {
+            if(rigidbody2D.velocity.y < 0)
+                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+            Jump(JumpForce);
         }
 
     }
