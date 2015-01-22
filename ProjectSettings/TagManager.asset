@@ -5,7 +5,7 @@ TagManager:
   tags:
   - Platform
   - EdgeCollider
-  - 
+  - Coin
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX
@@ -16,7 +16,7 @@ TagManager:
   Builtin Layer 6: 
   Builtin Layer 7: 
   User Layer 8: Platform
-  User Layer 9: 
+  User Layer 9: Player
   User Layer 10: 
   User Layer 11: 
   User Layer 12: 
