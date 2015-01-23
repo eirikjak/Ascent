@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.LevelGenerator
+namespace Assets.Scripts.LevelGenerator.Coins
 {
     abstract class CoinGenerationRule
     {
@@ -16,6 +13,6 @@ namespace Assets.Scripts.LevelGenerator
             SceneWidth = sceneWidth;
             CurrentHeight = initialHeight;
         }
-        public abstract Vector2 GetNext();
+        public abstract ICollection<Vector2> GetNext();
     }
 }

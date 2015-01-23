@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
-namespace Assets.Scripts.LevelGenerator
+namespace Assets.Scripts.LevelGenerator.Coins
 {
     class CoinGenerator
     {
@@ -22,7 +20,7 @@ namespace Assets.Scripts.LevelGenerator
 
         public IEnumerable<Vector2> GetNextCoins()
         {
-            return m_rules.Select(rule => rule.GetNext());
+            return m_rules.SelectMany(rule => rule.GetNext());
         } 
     }
 }

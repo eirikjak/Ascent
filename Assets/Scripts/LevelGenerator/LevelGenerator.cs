@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.LevelGenerator.Coins;
+using UnityEngine;
 
 namespace Assets.Scripts.LevelGenerator
 {
@@ -23,6 +24,8 @@ namespace Assets.Scripts.LevelGenerator
 
             var coinGenerator = new CoinGenerator();
             coinGenerator.AddRule(new RandomCoinGenerationRule(10, 0f, 2f));
+            coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 2f, CoinPatternFactory.GetPattern("line")));
+            coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 2f, CoinPatternFactory.GetPattern("box")));
             for (var i = 0; i < 100; i++)
             {
                 foreach (var coinPos in coinGenerator.GetNextCoins())
