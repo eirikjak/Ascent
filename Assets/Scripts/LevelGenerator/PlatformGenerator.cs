@@ -28,7 +28,7 @@ namespace Assets.Scripts.LevelGenerator
         public Vector2 GetNextPlatformPosition()
         {
             
-          
+      
             //Only one type of platform for now
             var platformWidth = m_platformWidths[0];
             var nextPlatform = new Vector2(Random.Range(0, m_levelWidth), m_lastPlatform.y + Random.Range(m_minPlatformDistance.y, m_maxPlatformDistance.y));

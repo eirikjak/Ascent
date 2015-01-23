@@ -14,7 +14,7 @@ namespace Assets.Scripts.LevelGenerator.Coins
 
         public override ICollection<Vector2> GetNext()
         {
-            var coins = m_pattern.GetCoinsInPattern().Select(pos => new Vector2(pos.x, pos.y + CurrentHeight)).ToList();
+            var coins = m_pattern.CoinsInPattern.Select(pos => new Vector2(pos.x, pos.y + CurrentHeight)).ToList();
             return coins;
         }
     }

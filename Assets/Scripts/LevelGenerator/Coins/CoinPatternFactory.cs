@@ -25,7 +25,8 @@ namespace Assets.Scripts.LevelGenerator.Coins
             {
                 return s_parsedPatterns[name];
             }
-            var jsonPattern = s_patterns[name].AsArray;
+            var jsonPattern = s_patterns[name]["pattern"].AsArray;
+            var coin_space = float.Parse(s_patterns[name]["coin_space"].Value);
             var pattern = new Collection<Vector2>();
             for (var i = 0; i < jsonPattern.Count; i++)
             {
@@ -34,12 +35,14 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 for (var j = 0; j < row.Count; j++)
                 {
                     if(Int32.Parse(row[j].Value) > 0)
-                        pattern.Add(new Vector2(j, i));
+                        pattern.Add(new Vector2(j*coin_space, i*coin_space));
                    
                 }
             }
-            var coinPattern = new CoinPattern(pattern);
-            ;
+            var width = pattern.Max(coins => coins.x)*coin_space;
+            var height = pattern.Max(coins => coins.y)*coin_space;
+            var coinPattern = new CoinPattern(pattern, new Rect(0, 0, width, height));
+            
             s_parsedPatterns[name] = coinPattern;
             return coinPattern;
         }
