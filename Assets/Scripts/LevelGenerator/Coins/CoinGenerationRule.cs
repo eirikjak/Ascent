@@ -13,6 +13,6 @@ namespace Assets.Scripts.LevelGenerator.Coins
             SceneWidth = sceneWidth;
             CurrentHeight = initialHeight;
         }
-        public abstract ICollection<Vector2> GetNext();
+        public abstract CoinBatch GetNext();
     }
 }

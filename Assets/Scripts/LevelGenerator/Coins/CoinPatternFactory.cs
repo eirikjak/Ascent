@@ -39,8 +39,8 @@ namespace Assets.Scripts.LevelGenerator.Coins
                    
                 }
             }
-            var width = pattern.Max(coins => coins.x)*coin_space;
-            var height = pattern.Max(coins => coins.y)*coin_space;
+            var width = pattern.Max(coins => coins.x + 1)*coin_space;
+            var height = pattern.Max(coins => coins.y +1)*coin_space;
             var coinPattern = new CoinPattern(pattern, new Rect(0, 0, width, height));
             
             s_parsedPatterns[name] = coinPattern;

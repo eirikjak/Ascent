@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 namespace Assets.Scripts.LevelGenerator.Coins
@@ -18,9 +19,12 @@ namespace Assets.Scripts.LevelGenerator.Coins
             m_rules.Add(rule);
         }
 
-        public IEnumerable<Vector2> GetNextCoins()
+        public IEnumerable<CoinBatch> GetNextCoins()
         {
-            return m_rules.SelectMany(rule => rule.GetNext());
+            var batches = m_rules.Select(rule => rule.GetNext()).ToList();
+            //For now use  the number of coins as a priority system.
+            return batches.Where(batch => !batches.Any(coinBatch => batch.Bounds.Overlaps(coinBatch.Bounds) && !batch.Equals(coinBatch) && batch.Coins.Count < coinBatch.Coins.Count));
+
         } 
     }
 }

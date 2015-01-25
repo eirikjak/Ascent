@@ -13,11 +13,15 @@ namespace Assets.Scripts.LevelGenerator.Coins
             m_coinDistance = distance;
         }
 
-        public override ICollection<Vector2> GetNext()
+        public override CoinBatch GetNext()
         {
             var coinpos = new Vector2(Random.Range(0, SceneWidth), CurrentHeight);
             CurrentHeight += m_coinDistance;
-            return new []{coinpos};
+            return new CoinBatch
+            {
+                Coins = new[] {coinpos},
+                Bounds = new Rect(0, 0, 0.6f, 0.6f)
+            };
         }
     }
 }

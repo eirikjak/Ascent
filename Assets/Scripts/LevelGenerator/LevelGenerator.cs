@@ -23,15 +23,20 @@ namespace Assets.Scripts.LevelGenerator
             }
 
             var coinGenerator = new CoinGenerator();
-            coinGenerator.AddRule(new RandomCoinGenerationRule(10, 0f, 2f));
+            //coinGenerator.AddRule(new RandomCoinGenerationRule(10, 0f, 2f));
+            coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 3f, CoinPatternFactory.GetPattern("box")));
             coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 2f, CoinPatternFactory.GetPattern("line")));
-            coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 2f, CoinPatternFactory.GetPattern("box")));
-            for (var i = 0; i < 100; i++)
+
+            for (var i = 0; i < 1; i++)
             {
-                foreach (var coinPos in coinGenerator.GetNextCoins())
+                foreach (var batch in coinGenerator.GetNextCoins())
                 {
-                    var coin = (GameObject)Instantiate(CoinPrefab);
-                    coin.transform.position = coinPos;
+                    foreach (var coinPos in batch.Coins)
+                    {
+                        var coin = (GameObject)Instantiate(CoinPrefab);
+                        coin.transform.position = coinPos;
+                    }
+
                 }
             }
 

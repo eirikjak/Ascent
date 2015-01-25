@@ -12,10 +12,14 @@ namespace Assets.Scripts.LevelGenerator.Coins
             m_pattern = pattern;
         }
 
-        public override ICollection<Vector2> GetNext()
+        public override CoinBatch GetNext()
         {
             var coins = m_pattern.CoinsInPattern.Select(pos => new Vector2(pos.x, pos.y + CurrentHeight)).ToList();
-            return coins;
+            return new CoinBatch
+            {
+                Coins = coins,
+                Bounds = new Rect(0, CurrentHeight, m_pattern.Bounds.width, m_pattern.Bounds.height)
+            };
         }
     }
 }
