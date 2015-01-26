@@ -22,5 +22,10 @@
 			[1,1,1,1,1]
 		]
 	}
+	"spaced_box": 
+	{
+		"base": "box",
+		"coin_space": 1.0
+	}
            
 }

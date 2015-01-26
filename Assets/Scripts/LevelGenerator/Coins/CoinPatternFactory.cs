@@ -25,26 +25,60 @@ namespace Assets.Scripts.LevelGenerator.Coins
             {
                 return s_parsedPatterns[name];
             }
-            var jsonPattern = s_patterns[name]["pattern"].AsArray;
-            var coin_space = float.Parse(s_patterns[name]["coin_space"].Value);
-            var pattern = new Collection<Vector2>();
-            for (var i = 0; i < jsonPattern.Count; i++)
+            ICollection<Vector2> pattern;
+            float coinSpace;
+            var currentPattern = s_patterns[name];
+
+            if (currentPattern.ContainsKey("base"))
             {
-               
-                var row = jsonPattern[i];
-                for (var j = 0; j < row.Count; j++)
-                {
-                    if(Int32.Parse(row[j].Value) > 0)
-                        pattern.Add(new Vector2(j*coin_space, i*coin_space));
-                   
-                }
+                var basePattern = GetPattern(currentPattern["base"].Value);
+                pattern = currentPattern.ContainsKey("pattern")
+                    ? ParsePattern(currentPattern)
+                    : basePattern.CoinsInPattern;
+                coinSpace = currentPattern.ContainsKey("coin_space")
+                    ? ParseCoinSpace(currentPattern)
+                    : basePattern.CoinSpace;
+
             }
-            var width = pattern.Max(coins => coins.x + 1)*coin_space;
-            var height = pattern.Max(coins => coins.y +1)*coin_space;
-            var coinPattern = new CoinPattern(pattern, new Rect(0, 0, width, height));
-            
+            else
+            {
+                coinSpace = ParseCoinSpace(currentPattern);
+                pattern = ParsePattern(currentPattern);
+            }
+           
+            var coinPattern = CreateCoinPattern(pattern, coinSpace);
             s_parsedPatterns[name] = coinPattern;
             return coinPattern;
         }
+
+        private static CoinPattern CreateCoinPattern(ICollection<Vector2> pattern, float coin_space)
+        {
+            var width = pattern.Max(coins => coins.x + 1) * coin_space;
+            var height = pattern.Max(coins => coins.y + 1) * coin_space;
+
+            return new CoinPattern(pattern, new Rect(0, 0, width, height), coin_space);
+        }
+        private static float ParseCoinSpace(JSONNode jsonNode)
+        {
+            return float.Parse(jsonNode["coin_space"].Value);
+        } 
+        private static ICollection<Vector2> ParsePattern(JSONNode jsonNode)
+        {
+            var jsonPattern = jsonNode["pattern"].AsArray;
+            var pattern = new Collection<Vector2>();
+            for (var i = 0; i < jsonPattern.Count; i++)
+            {
+
+                var row = jsonPattern[i];
+                for (var j = 0; j < row.Count; j++)
+                {
+                    if (Int32.Parse(row[j].Value) > 0)
+                        pattern.Add(new Vector2(j, i));
+
+                }
+            }
+            return pattern;
+        } 
+  
     }
 }

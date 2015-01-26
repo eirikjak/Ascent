@@ -46,8 +46,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
- 
- 
+using System.Net.Configuration;
+
+
 namespace SimpleJSON
 {
     public enum JSONBinaryTag
@@ -65,6 +66,7 @@ namespace SimpleJSON
     {
         #region common interface
         public virtual void Add(string aKey, JSONNode aItem){ }
+        public virtual bool ContainsKey(string key) { throw new InvalidOperationException();}
         public virtual JSONNode this[int aIndex]   { get { return null; } set { } }
         public virtual JSONNode this[string aKey]  { get { return null; } set { } }
         public virtual string Value                { get { return "";   } set { } }
@@ -677,6 +679,10 @@ namespace SimpleJSON
     public class JSONClass : JSONNode, IEnumerable
     {
         private Dictionary<string,JSONNode> m_Dict = new Dictionary<string,JSONNode>();
+        public override bool ContainsKey(string key)
+        {
+            return m_Dict.ContainsKey(key);
+        }
         public override JSONNode this[string aKey]
         {
             get
