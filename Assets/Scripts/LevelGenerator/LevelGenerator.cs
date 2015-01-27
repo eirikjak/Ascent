@@ -24,9 +24,9 @@ namespace Assets.Scripts.LevelGenerator
 
             var coinGenerator = new CoinGenerator();
             //coinGenerator.AddRule(new RandomCoinGenerationRule(10, 0f, 2f));
-            coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 3f, CoinPatternFactory.GetPattern("box")));
-            coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 7f, CoinPatternFactory.GetPattern("spaced_box")));
-            coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 2f, CoinPatternFactory.GetPattern("line")));
+            //coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 3f, CoinPatternFactory.GetPattern("box")));
+            coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 8f, CoinPatternFactory.GetPattern("test")));
+           // coinGenerator.AddRule(new PatternCoinGeneratorRule(10, 2f, CoinPatternFactory.GetPattern("line")));
 
             for (var i = 0; i < 1; i++)
             {

@@ -1,5 +1,6 @@
 {
-    
+
+  
     "line" : 
     {
 		"coin_space": 0.6,
@@ -22,10 +23,41 @@
 			[1,1,1,1,1]
 		]
 	}
+	"strip": {
+		"coin_space": 0.6,
+		"pattern": [
+			["coin", "coin"],
+			["coin"]
+		]
+	}
+	"double_strip": {
+		"coin_space": 0.6,
+		"pattern":[
+			["strip", "strip"],
+			["strip"]
+			
+		]	
+	}
+	"test": {
+		"coin_space": 2.0,
+		"pattern": [
+			["strip", "strip"],
+			["strip", "line", "double_strip"],
+			["strip", "box"]
+		]
+	}
 	"spaced_box": 
 	{
 		"base": "box",
 		"coin_space": 1.0
+	}
+	"combined_pattern":
+	{
+		"coin_space": 0.6,
+		"pattern": [
+			["line"],
+			["spaced_box"]	
+		]
 	}
            
 }

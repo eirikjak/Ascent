@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using SimpleJSON;
+using Assets.Scripts.Util;
 using UnityEngine;
 
 namespace Assets.Scripts.LevelGenerator.Coins
@@ -17,6 +17,7 @@ namespace Assets.Scripts.LevelGenerator.Coins
 
             s_patterns = JSON.Parse(Resources.Load<TextAsset>("coin_patterns").text);
             s_parsedPatterns = new Dictionary<string, CoinPattern>();
+            s_parsedPatterns["coin"] = new CoinPattern(new Coin(CoinType.Regular, 0, 0), 0.6f);
         }
 
         public static CoinPattern GetPattern(string name)
@@ -25,7 +26,14 @@ namespace Assets.Scripts.LevelGenerator.Coins
             {
                 return s_parsedPatterns[name];
             }
-            ICollection<Vector2> pattern;
+            
+            int value;
+            if (Int32.TryParse(name, out value))
+            {
+                return value > 0 ? s_parsedPatterns["coin"] : s_parsedPatterns["empty"];
+
+            }
+            ICollection<Tuple<Vector2, CoinPattern>> pattern;
             float coinSpace;
             var currentPattern = s_patterns[name];
 
@@ -34,7 +42,7 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 var basePattern = GetPattern(currentPattern["base"].Value);
                 pattern = currentPattern.ContainsKey("pattern")
                     ? ParsePattern(currentPattern)
-                    : basePattern.CoinsInPattern;
+                    : basePattern.CoinPatternPatterns;
                 coinSpace = currentPattern.ContainsKey("coin_space")
                     ? ParseCoinSpace(currentPattern)
                     : basePattern.CoinSpace;
@@ -45,38 +53,33 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 coinSpace = ParseCoinSpace(currentPattern);
                 pattern = ParsePattern(currentPattern);
             }
-           
-            var coinPattern = CreateCoinPattern(pattern, coinSpace);
+
+            var coinPattern = new CoinPattern(pattern, coinSpace);
             s_parsedPatterns[name] = coinPattern;
             return coinPattern;
         }
 
-        private static CoinPattern CreateCoinPattern(ICollection<Vector2> pattern, float coin_space)
-        {
-            var width = pattern.Max(coins => coins.x + 1) * coin_space;
-            var height = pattern.Max(coins => coins.y + 1) * coin_space;
 
-            return new CoinPattern(pattern, new Rect(0, 0, width, height), coin_space);
-        }
         private static float ParseCoinSpace(JSONNode jsonNode)
         {
             return float.Parse(jsonNode["coin_space"].Value);
         } 
-        private static ICollection<Vector2> ParsePattern(JSONNode jsonNode)
+        private static Collection<Tuple<Vector2, CoinPattern>> ParsePattern(JSONNode jsonNode)
         {
             var jsonPattern = jsonNode["pattern"].AsArray;
-            var pattern = new Collection<Vector2>();
+            var pattern = new Collection<Tuple<Vector2, CoinPattern>>();  
+
             for (var i = 0; i < jsonPattern.Count; i++)
             {
 
                 var row = jsonPattern[i];
                 for (var j = 0; j < row.Count; j++)
                 {
-                    if (Int32.Parse(row[j].Value) > 0)
-                        pattern.Add(new Vector2(j, i));
-
+                        pattern.Add(new Tuple<Vector2, CoinPattern>(new Vector2(j, i), GetPattern(row[j].Value)));
+                    
                 }
             }
+
             return pattern;
         } 
   
