@@ -40,13 +40,10 @@ namespace Assets.Scripts.LevelGenerator.Coins
         public CoinPattern(ICollection<Tuple<Vector2, CoinPattern>> coinPatterns , float coinSpace)
         {
             m_coinPatterns = coinPatterns;
-           // var width = coinPatterns.Sum()
-            //var height = coinPatterns.Max(coin => coin.y + 1) * coinSpace;
-           // Bounds = new Rect(0, 0, width, height);
+
             CoinSpace = coinSpace;
             Coins = new Collection<Coin>();
             var offset = Vector2.zero;
-            int c = 0;
             var largestX = 0f;
             var largestY = 0f;
             foreach (var tuple in coinPatterns)
@@ -55,7 +52,6 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 var patternPosition = tuple.First;
                 if ((int)patternPosition.x == 0)
                 {
-                    Debug.Log("here");
                     if (offset.x > 0)
                         offset.y = largestY + CoinSpace;
                     offset.x = 0;
@@ -64,10 +60,8 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 }
                 foreach (var coin in tuple.Second.Coins)
                 {
-                    Debug.Log(offset + "" + (++c));
-                    var x = coin.X + offset.x;
-                    var y = coin.Y + offset.y;
-                    Debug.Log("x: " + x + " y: " + y);
+                    var x = coin.x + offset.x;
+                    var y = coin.y + offset.y;
                     Coins.Add(new Coin(coin.Type, x, y));
                     largestX = Math.Max(x, largestX);
                     largestY = Math.Max(y, largestY);
@@ -75,8 +69,8 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 largestX += CoinSpace;
 
             }
-            var width = Coins.Max(coin => coin.X + 1);
-            var height = Coins.Max(coin => coin.Y + 1);
+            var width = Coins.Max(coin => coin.x + 1);
+            var height = Coins.Max(coin => coin.y + 1);
             Bounds = new Rect(0, 0, width, height);
 
         }

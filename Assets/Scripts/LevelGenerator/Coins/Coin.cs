@@ -10,14 +10,14 @@ namespace Assets.Scripts.LevelGenerator.Coins
     class Coin
     {
         public CoinType Type { get; protected set; }
-        public float X { get; protected set; }
-        public float Y { get; protected set; }
+        public float x { get; protected set; }
+        public float y { get; protected set; }
 
         public Coin(CoinType type, float x, float y)
         {
             Type = type;
-            X = x;
-            Y = y;
+            this.x = x;
+            this.y = y;
         }
     }
 

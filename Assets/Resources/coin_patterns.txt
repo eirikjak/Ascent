@@ -1,6 +1,4 @@
 {
-
-  
     "line" : 
     {
 		"coin_space": 0.6,
@@ -39,7 +37,7 @@
 		]	
 	}
 	"test": {
-		"coin_space": 2.0,
+		"coin_space": 0.6,
 		"pattern": [
 			["strip", "strip"],
 			["strip", "line", "double_strip"],
