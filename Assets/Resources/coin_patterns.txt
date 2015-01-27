@@ -1,6 +1,14 @@
 {
-    "line" : 
-    {
+	"default":{
+		"coin_space": 0.6,
+		"name_map":{
+			"Coin": 1
+		}
+	},
+    "shapes": {
+		
+		"line" : 
+		{
 		"coin_space": 0.6,
 		"pattern": [
 			[1],
@@ -13,6 +21,7 @@
 	},
 	"box" : 
     {
+
 		"coin_space": 0.6,
 		"pattern": [
 	        [1,1,1,1,1],
@@ -24,8 +33,8 @@
 	"strip": {
 		"coin_space": 0.6,
 		"pattern": [
-			["coin", "coin"],
-			["coin"]
+			[1, 1],
+			[1]
 		]
 	}
 	"double_strip": {
@@ -57,5 +66,7 @@
 			["spaced_box"]	
 		]
 	}
+	}
+	
            
 }

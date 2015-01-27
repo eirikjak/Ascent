@@ -10,14 +10,27 @@ namespace Assets.Scripts.LevelGenerator.Coins
 {
     class CoinPatternFactory
     {
-        private static readonly JSONNode s_patterns;
-        private static readonly Dictionary<string, CoinPattern> s_parsedPatterns; 
+        private static readonly JSONNode s_shapes;
+        private static readonly Dictionary<string, CoinPattern> s_parsedPatterns;
+        private static readonly IDictionary<int, string> s_defaultNameMap;
+        private static readonly float s_defaultCoinSpace;
         static CoinPatternFactory()
         {
-
-            s_patterns = JSON.Parse(Resources.Load<TextAsset>("coin_patterns").text);
+            var config = JSON.Parse(Resources.Load<TextAsset>("coin_patterns").text);
+            s_shapes = config["shapes"];
+            s_defaultNameMap = ParseNameMap(config["default"]);
+            s_defaultCoinSpace = ParseCoinSpace(config["default"]);
             s_parsedPatterns = new Dictionary<string, CoinPattern>();
-            s_parsedPatterns["coin"] = new CoinPattern(new Coin(CoinType.Regular, 0, 0), 0.6f);
+
+            //Create the root items. Coins, platforms, powerups, etc.
+            foreach (var generatorItem in GeneratorItems.Instance.Items)
+            {
+                var extents = generatorItem.Prefab.renderer.bounds.extents;
+                extents.x *= generatorItem.Prefab.transform.localScale.x;
+                extents.y *= generatorItem.Prefab.transform.localScale.y;
+                s_parsedPatterns[generatorItem.Name] = new CoinPattern(new Coin(generatorItem.Name, 0, 0), extents.x * 2, extents.y * 2);
+            }
+
         }
 
         public static CoinPattern GetPattern(string name)
@@ -27,34 +40,28 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 return s_parsedPatterns[name];
             }
             
-            int value;
-            if (Int32.TryParse(name, out value))
-            {
-                return value > 0 ? s_parsedPatterns["coin"] : s_parsedPatterns["empty"];
-
-            }
             ICollection<Tuple<Vector2, CoinPattern>> pattern;
+            IDictionary<int, string> nameMap;
             float coinSpace;
-            var currentPattern = s_patterns[name];
+            var currentPattern = s_shapes[name];
 
             if (currentPattern.ContainsKey("base"))
             {
                 var basePattern = GetPattern(currentPattern["base"].Value);
-                pattern = currentPattern.ContainsKey("pattern")
-                    ? ParsePattern(currentPattern)
-                    : basePattern.CoinPatternPatterns;
-                coinSpace = currentPattern.ContainsKey("coin_space")
-                    ? ParseCoinSpace(currentPattern)
-                    : basePattern.CoinSpace;
+                nameMap = currentPattern.ContainsKey("name_map") ? ParseNameMap(currentPattern) : basePattern.NameMap;
+                pattern = currentPattern.ContainsKey("pattern") ? ParsePattern(currentPattern, nameMap) : basePattern.CoinPatternPatterns;
+                coinSpace = currentPattern.ContainsKey("coin_space") ? ParseCoinSpace(currentPattern) : basePattern.CoinSpace;
 
             }
             else
             {
                 coinSpace = ParseCoinSpace(currentPattern);
-                pattern = ParsePattern(currentPattern);
+                nameMap = ParseNameMap(currentPattern);
+                pattern = ParsePattern(currentPattern, nameMap);
+
             }
 
-            var coinPattern = new CoinPattern(pattern, coinSpace);
+            var coinPattern = new CoinPattern(pattern, nameMap, coinSpace);
             s_parsedPatterns[name] = coinPattern;
             return coinPattern;
         }
@@ -62,9 +69,30 @@ namespace Assets.Scripts.LevelGenerator.Coins
 
         private static float ParseCoinSpace(JSONNode jsonNode)
         {
-            return float.Parse(jsonNode["coin_space"].Value);
-        } 
-        private static Collection<Tuple<Vector2, CoinPattern>> ParsePattern(JSONNode jsonNode)
+            if (jsonNode.ContainsKey("coin_space"))
+            {
+                return float.Parse(jsonNode["coin_space"].Value);
+            }
+            return s_defaultCoinSpace;
+
+        }
+
+        private static IDictionary<int, string> ParseNameMap(JSONNode shapeNode)
+        {
+            if (!shapeNode.ContainsKey("name_map")) return s_defaultNameMap;
+            var nameMap = new Dictionary<int, string>();
+            var mapNode = shapeNode["name_map"];
+            foreach (var generatorItem in GeneratorItems.Instance.Items)
+            {
+                if (mapNode.ContainsKey(generatorItem.Name))
+                {
+                    nameMap.Add(mapNode[generatorItem.Name].AsInt, generatorItem.Name);
+                }
+                
+            }
+            return nameMap;
+        }
+        private static Collection<Tuple<Vector2, CoinPattern>> ParsePattern(JSONNode jsonNode, IDictionary<int, string> nameMap )
         {
             var jsonPattern = jsonNode["pattern"].AsArray;
             var pattern = new Collection<Tuple<Vector2, CoinPattern>>();  
@@ -75,7 +103,13 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 var row = jsonPattern[i];
                 for (var j = 0; j < row.Count; j++)
                 {
-                        pattern.Add(new Tuple<Vector2, CoinPattern>(new Vector2(j, i), GetPattern(row[j].Value)));
+                    int value;
+                    var name = row[j].Value;
+                    if (Int32.TryParse(name, out value))
+                    {
+                        name = nameMap[value];
+                    }
+                    pattern.Add(new Tuple<Vector2, CoinPattern>(new Vector2(j, i), GetPattern(name)));
                     
                 }
             }

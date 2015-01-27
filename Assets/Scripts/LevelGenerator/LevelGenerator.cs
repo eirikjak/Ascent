@@ -3,8 +3,10 @@ using UnityEngine;
 
 namespace Assets.Scripts.LevelGenerator
 {
+   
     public class LevelGenerator : MonoBehaviour
     {
+        public GeneratorItems Items = GeneratorItems.Instance;
         public GameObject PlatformPrefab;
         public GameObject CoinPrefab;
         // Use this for initialization
@@ -12,6 +14,7 @@ namespace Assets.Scripts.LevelGenerator
         public Vector2 MinPlatformDistance;
         void Start ()
         {
+         
             var test = (GameObject) Instantiate(PlatformPrefab);
             var width = test.collider2D.bounds.extents.x;
             Destroy(test);

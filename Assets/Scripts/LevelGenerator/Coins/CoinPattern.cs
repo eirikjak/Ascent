@@ -12,21 +12,20 @@ namespace Assets.Scripts.LevelGenerator.Coins
     {
         private readonly ICollection<Tuple<Vector2, CoinPattern>> m_coinPatterns;
         private readonly ICollection<Vector2> m_coinPositions;
-        
+        public IDictionary<int, string> NameMap { get; protected set; } 
         public Rect Bounds { get; protected set; }
         public float CoinSpace { get; protected set; }
         public ICollection<Tuple<Vector2, CoinPattern>> CoinPatternPatterns { get { return m_coinPatterns; }}
         public ICollection<Coin> Coins { get; protected set; } 
         public ICollection<Vector2> CoinPositions { get { return m_coinPositions; } }
 
-        public CoinPattern(Coin coin, float coinSpace)
+        public CoinPattern(Coin coin, float width, float height)
         {
             Coins = new Collection<Coin>()
             {
                 coin
             };
-            CoinSpace = CoinSpace;
-            Bounds = new Rect(0, 0, coinSpace, coinSpace);
+            Bounds = new Rect(0, 0, width, height);
             m_coinPatterns = new Collection<Tuple<Vector2, CoinPattern>>
             {
                 new Tuple<Vector2, CoinPattern>(new Vector2(0, 0), this)
@@ -37,10 +36,10 @@ namespace Assets.Scripts.LevelGenerator.Coins
             };
             
         }
-        public CoinPattern(ICollection<Tuple<Vector2, CoinPattern>> coinPatterns , float coinSpace)
+        public CoinPattern(ICollection<Tuple<Vector2, CoinPattern>> coinPatterns, IDictionary<int, string> nameMap, float coinSpace)
         {
             m_coinPatterns = coinPatterns;
-
+            NameMap = nameMap;
             CoinSpace = coinSpace;
             Coins = new Collection<Coin>();
             var offset = Vector2.zero;
@@ -62,14 +61,14 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 {
                     var x = coin.x + offset.x;
                     var y = coin.y + offset.y;
-                    Coins.Add(new Coin(coin.Type, x, y));
+                    Coins.Add(new Coin(coin.Name, x, y));
                     largestX = Math.Max(x, largestX);
                     largestY = Math.Max(y, largestY);
                 }
                 largestX += CoinSpace;
 
             }
-            var width = Coins.Max(coin => coin.x + 1);
+            var width = Coins.Max(coin => coin.x);
             var height = Coins.Max(coin => coin.y + 1);
             Bounds = new Rect(0, 0, width, height);
 

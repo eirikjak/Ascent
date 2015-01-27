@@ -9,20 +9,16 @@ namespace Assets.Scripts.LevelGenerator.Coins
 {
     class Coin
     {
-        public CoinType Type { get; protected set; }
+        public string Name { get; protected set; }
         public float x { get; protected set; }
         public float y { get; protected set; }
 
-        public Coin(CoinType type, float x, float y)
+        public Coin(string name, float x, float y)
         {
-            Type = type;
+            Name = name;
             this.x = x;
             this.y = y;
         }
     }
 
-    public enum CoinType
-    {
-        Regular
-    }
 }

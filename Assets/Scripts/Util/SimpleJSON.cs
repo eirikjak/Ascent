@@ -681,6 +681,7 @@ namespace Assets.Scripts.Util
         {
             return m_Dict.ContainsKey(key);
         }
+
         public override JSONNode this[string aKey]
         {
             get
