@@ -26,8 +26,6 @@ namespace Assets.Scripts.LevelGenerator.Coins
             foreach (var generatorItem in GeneratorItems.Instance.Items)
             {
                 var extents = generatorItem.Prefab.renderer.bounds.extents;
-                extents.x *= generatorItem.Prefab.transform.localScale.x;
-                extents.y *= generatorItem.Prefab.transform.localScale.y;
                 s_parsedPatterns[generatorItem.Name] = new CoinPattern(new Coin(generatorItem.Name, 0, 0), extents.x * 2, extents.y * 2);
             }
 

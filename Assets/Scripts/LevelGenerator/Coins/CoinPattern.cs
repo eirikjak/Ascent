@@ -26,6 +26,7 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 coin
             };
             Bounds = new Rect(0, 0, width, height);
+            Debug.Log(Bounds);
             m_coinPatterns = new Collection<Tuple<Vector2, CoinPattern>>
             {
                 new Tuple<Vector2, CoinPattern>(new Vector2(0, 0), this)
@@ -66,14 +67,12 @@ namespace Assets.Scripts.LevelGenerator.Coins
                     largestY = Math.Max(y, largestY);
                 }
                 largestX += CoinSpace;
-
             }
-            var width = Coins.Max(coin => coin.x);
-            var height = Coins.Max(coin => coin.y + 1);
+            var width = Coins.Max(coin => coin.x + CoinPatternFactory.GetPattern(coin.Name).Bounds.width / 2);
+            var height = Coins.Max(coin => coin.y + CoinPatternFactory.GetPattern(coin.Name).Bounds.height / 2);
             Bounds = new Rect(0, 0, width, height);
 
         }
-
 
 
     }
