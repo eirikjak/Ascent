@@ -10,14 +10,16 @@ namespace Assets.Scripts.LevelGenerator.Coins
     class Coin
     {
         public string Name { get; protected set; }
-        public float x { get; protected set; }
-        public float y { get; protected set; }
+        //Shortcuts to the underlying Vector2 position
+        public float x { get { return m_position.x; }}
+        public float y { get {return m_position.y;} }
 
+        public Vector2 Position { get { return m_position; } }
+        private Vector2 m_position;
         public Coin(string name, float x, float y)
         {
             Name = name;
-            this.x = x;
-            this.y = y;
+            m_position = new Vector2(x, y);
         }
     }
 

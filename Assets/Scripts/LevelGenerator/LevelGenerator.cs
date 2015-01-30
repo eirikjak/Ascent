@@ -37,8 +37,9 @@ namespace Assets.Scripts.LevelGenerator
                 {
                     foreach (var coinPos in batch.Coins)
                     {
-                        var coin = (GameObject)Instantiate(CoinPrefab);
-                        coin.transform.position = coinPos;
+
+                        var item = (GameObject)Instantiate(GeneratorItems.GetItem(coinPos.Name).Prefab);
+                        item.transform.position = coinPos.Position;
                     }
 
                 }

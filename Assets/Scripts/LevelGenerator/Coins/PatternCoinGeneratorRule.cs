@@ -14,7 +14,7 @@ namespace Assets.Scripts.LevelGenerator.Coins
 
         public override CoinBatch GetNext()
         {
-            var coins = m_pattern.Coins.Select(pos => new Vector2(pos.x, pos.y + CurrentHeight)).ToList();
+            var coins = m_pattern.Coins.Select(coin => new Coin(coin.Name, coin.x, coin.y + CurrentHeight)).ToList();
             Debug.Log(m_pattern.Bounds);
             return new CoinBatch
             {

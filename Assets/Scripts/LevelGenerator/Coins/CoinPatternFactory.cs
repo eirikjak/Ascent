@@ -48,7 +48,7 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 var basePattern = GetPattern(currentPattern["base"].Value);
                 nameMap = currentPattern.ContainsKey("name_map") ? ParseNameMap(currentPattern) : basePattern.NameMap;
                 pattern = currentPattern.ContainsKey("pattern") ? ParsePattern(currentPattern, nameMap) : basePattern.CoinPatternPatterns;
-                coinSpace = currentPattern.ContainsKey("coin_space") ? ParseCoinSpace(currentPattern) : basePattern.CoinSpace;
+                coinSpace = currentPattern.ContainsKey("item_space") ? ParseCoinSpace(currentPattern) : basePattern.CoinSpace;
 
             }
             else
@@ -67,9 +67,9 @@ namespace Assets.Scripts.LevelGenerator.Coins
 
         private static float ParseCoinSpace(JSONNode jsonNode)
         {
-            if (jsonNode.ContainsKey("coin_space"))
+            if (jsonNode.ContainsKey("item_space"))
             {
-                return float.Parse(jsonNode["coin_space"].Value);
+                return float.Parse(jsonNode["item_space"].Value);
             }
             return s_defaultCoinSpace;
 

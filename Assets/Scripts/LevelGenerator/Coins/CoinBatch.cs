@@ -9,6 +9,6 @@ namespace Assets.Scripts.LevelGenerator.Coins
     class CoinBatch
     {
         public Rect Bounds { get; set; }
-        public ICollection<Vector2> Coins { get; set; } 
+        public ICollection<Coin> Coins { get; set; } 
     }
 }

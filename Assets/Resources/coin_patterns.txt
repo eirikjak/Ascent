@@ -1,6 +1,6 @@
 {
 	"default":{
-		"coin_space": 0.6,
+		"item_space": 0.0,
 		"name_map":{
 			"Coin": 1
 		}
@@ -9,7 +9,10 @@
 		
 		"line" : 
 		{
-		"coin_space": 0.6,
+		"name_map": {
+			"BigCoin":1
+		}
+		
 		"pattern": [
 			[1],
             [1],
@@ -22,7 +25,7 @@
 	"box" : 
     {
 
-		"coin_space": 0.6,
+		
 		"pattern": [
 	        [1,1,1,1,1],
 			[1,1,1,1,1],
@@ -31,36 +34,36 @@
 		]
 	}
 	"strip": {
-		"coin_space": 0.6,
+		
 		"pattern": [
 			[1, 1],
-			[1]
+			
 		]
 	}
 	"double_strip": {
-		"coin_space": 0.6,
+	
 		"pattern":[
 			["strip", "strip"],
-			["strip"]
 			
 		]	
 	}
+	
 	"test": {
-		"coin_space": 0.6,
+	
 		"pattern": [
 			["strip", "strip"],
-			["strip", "line", "double_strip"],
-			["strip", "box"]
+			["box", "strip"]
+	
 		]
 	}
 	"spaced_box": 
 	{
 		"base": "box",
-		"coin_space": 1.0
+		
 	}
 	"combined_pattern":
 	{
-		"coin_space": 0.6,
+	
 		"pattern": [
 			["line"],
 			["spaced_box"]	
