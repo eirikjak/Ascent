@@ -46,14 +46,16 @@ namespace Assets.Scripts.LevelGenerator.Coins
             var largestX = 0f;
             var largestY = 0f;
             CoinPattern previousPattern = null;
+            Debug.Log("Begin");
             foreach (var tuple in coinPatterns)
             {
             
                 var patternPosition = tuple.First;
+                
                 if ((int)patternPosition.x == 0)
                 {
-                    if(offset.x > 0)
-                        offset.y += previousPattern.Bounds.height;
+                    if (offset.x > 0)
+                        offset.y = largestY;
                     offset.x = 0;
                     largestX = 0f;
                     largestY = 0f;
@@ -61,13 +63,16 @@ namespace Assets.Scripts.LevelGenerator.Coins
                 foreach (var coin in tuple.Second.Coins)
                 {
                     var coinBounds = CoinPatternFactory.GetPattern(coin.Name).Bounds;
-                    var x = coin.x + offset.x + coinBounds.width/2;
+
+                    var x = coin.x + offset.x + ((coin != tuple.Second.Coins.First()) || (tuple != coinPatterns.First())? coinBounds.width/2 : 0);
+                    Debug.Log("X: " +x + " offset: " + offset.x + " width: " + coinBounds.width);
                     var y = coin.y + offset.y;
                     var nextCoin = new Coin(coin.Name, x, y);
                     Coins.Add(nextCoin);
                 }
                 previousPattern = tuple.Second;
-                offset.x += tuple.Second.Bounds.width;
+                largestY = Math.Max(largestY, offset.y + tuple.Second.Bounds.height);
+                offset.x += tuple.Second.Bounds.width/2;
                 
             }
             var left = Coins.Min(coin => coin.x - CoinPatternFactory.GetPattern(coin.Name).Bounds.width/2);

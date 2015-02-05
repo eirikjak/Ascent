@@ -33,8 +33,10 @@ namespace Assets.Scripts.LevelGenerator.Coins
 
         public static CoinPattern GetPattern(string name)
         {
+            Debug.Log(name+ "1");
             if (s_parsedPatterns.ContainsKey(name))
-            {
+            {   
+                Debug.Log(name + "2");
                 return s_parsedPatterns[name];
             }
             

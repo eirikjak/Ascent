@@ -10,7 +10,7 @@
 		"line" : 
 		{
 		"name_map": {
-			"BigCoin":1
+			"Rect":1
 		}
 		
 		"pattern": [
@@ -51,8 +51,8 @@
 	"test": {
 	
 		"pattern": [
-			["strip", "strip"],
-			["box", "strip"]
+			["strip"],
+		
 	
 		]
 	}
